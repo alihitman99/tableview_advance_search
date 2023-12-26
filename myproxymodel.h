@@ -40,9 +40,9 @@ public:
     Q_INVOKABLE QList<QString> getDataComboBoxInt();
     Q_INVOKABLE QList<QString> getColorFilter();
     Q_INVOKABLE void addTag(QString search , QString name, QString value);
-    Q_INVOKABLE void addTag1(QString search , QString name, QString value);
-    Q_INVOKABLE void addTag2(QString search , QString name, int value1, int value2);
-    Q_INVOKABLE void addTag3(QString search , QString name, int value, QString mark);
+    Q_INVOKABLE void addTag1(QString name, QString value);
+    Q_INVOKABLE void addTag2(QString name, int value1, int value2);
+    Q_INVOKABLE void addTag3(QString name, int value, QString mark);
     Q_INVOKABLE void removeTag(QString filterSearch, QString name, QString value);
 
     Q_INVOKABLE void selectionRow(int Row, int Column);
@@ -56,7 +56,7 @@ public:
 
     Q_INVOKABLE QList<QString> getTabBarName();
 
-    Q_INVOKABLE void setSearchCombo(QString text);
+    Q_INVOKABLE QStringList filterCombo(QString text, QString nameFilter);
 
 signals:
     //void comboItemChanged();
@@ -87,6 +87,7 @@ private:
     QVector<QString> colorList;
     QVector<QString> tabList;
 
+    QVector<QString> comboSearch;
     //QStringList m_comboItem;
     //QStringList m_comboItemList;
 

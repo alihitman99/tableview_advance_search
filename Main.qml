@@ -70,6 +70,9 @@ Window {
 
                     RowLayout{
                         ComboFilter{
+                            id : comboFilter1
+                            model: myProxyModel.getDataComboBox()
+                            property string nameFilter: "String"
 
                         }
 
@@ -87,7 +90,7 @@ Window {
                                                 if (event.key === Qt.Key_Enter || event.key === 16777220) {
                                                     //console.log("pressed enter")
                                                     tagsModel.append({name: comboFilter1.currentText, signLogical: " : " , value1: txtFilter1.text, isTo:'' , value2:'', filter:"filter1"})
-                                                    myProxyModel.addTag1("filter", comboFilter1.currentText, txtFilter1.text);
+                                                    myProxyModel.addTag1(comboFilter1.currentText, txtFilter1.text);
                                                 }
                                             }
 
@@ -105,10 +108,12 @@ Window {
                     }
 
                     RowLayout{
-                        ComboBox{
-                            id: comboFilter2
+                        ComboFilter{
+                            id : comboFilter2
                             model: myProxyModel.getDataComboBoxInt()
+                            property string nameFilter: "Int"
                         }
+
                         Text{
                             text: ":"
                             font.pointSize: 12
@@ -134,15 +139,16 @@ Window {
                                                 if (event.key === Qt.Key_Enter || event.key === 16777220) {
                                                     //console.log("pressed enter")
                                                     tagsModel.append({name: comboFilter2.currentText, signLogical: " : "  , value1: txtFromFilter2.text, isTo: " To " , value2: txtToFilter2.text, filter: "filter2"})
-                                                    myProxyModel.addTag2("filter", comboFilter2.currentText, txtFromFilter2.text, txtToFilter2.text)
+                                                    myProxyModel.addTag2(comboFilter2.currentText, txtFromFilter2.text, txtToFilter2.text)
                                                 }
                                             }
                         }
                     }
                     RowLayout{
-                        ComboBox{
-                            id: comboFilter3
+                        ComboFilter{
+                            id : comboFilter3
                             model: myProxyModel.getDataComboBoxInt()
+                            property string nameFilter: "Int"
                         }
                         Text{
                             id : _txtFilter3
@@ -205,7 +211,7 @@ Window {
                                                 if (event.key === Qt.Key_Enter || event.key === 16777220) {
                                                     //console.log("pressed enter")
                                                     tagsModel.append({name: comboFilter3.currentText, signLogical: _txtFilter3.text, value1: txtFilter3.text, isTo: "" , value2: "", filter: "filter3"})
-                                                    myProxyModel.addTag3("filter", comboFilter3.currentText, txtFilter3.text, _txtFilter3.text)
+                                                    myProxyModel.addTag3(comboFilter3.currentText, txtFilter3.text, _txtFilter3.text)
                                                 }
                                             }
                         }

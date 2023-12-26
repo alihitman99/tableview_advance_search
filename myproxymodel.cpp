@@ -5,7 +5,6 @@
 MyProxyModel::MyProxyModel(QObject *parent)
     : QSortFilterProxyModel(parent)
 {
-
     //    int DataTableSize = dynamic_cast<MyTableView*>(sourceModel())->Data.at(0).FieldData.size();
     //    for (int i = 0; i < DataTableSize; i++) {
     //        columnName.append(dynamic_cast<MyTableView*>(sourceModel())->Data.at(0).FieldData.at(i).name);
@@ -21,16 +20,9 @@ MyProxyModel::MyProxyModel(QObject *parent)
         }
     }
 
-    //    columnNameInt.append(myTableModel.Data.at(0).FieldData.at(Ecolumn::ETn).name);
-    //    columnNameInt.append(myTableModel.Data.at(0).FieldData.at(Ecolumn::ELatitude).name);
-    //    columnNameInt.append(myTableModel.Data.at(0).FieldData.at(Ecolumn::ELongitude).name);
-    //    columnNameInt.append(myTableModel.Data.at(0).FieldData.at(Ecolumn::EAltitude).name);
-    //    columnNameInt.append(myTableModel.Data.at(0).FieldData.at(Ecolumn::EHeading).name);
-
     //    qDebug()<<columnNameInt;
     //    qDebug()<<dynamic_cast<MyTableView *>(sourceModel())->Data.at(0).FieldData.size();
 }
-
 
 bool MyProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
@@ -248,31 +240,31 @@ void MyProxyModel::addTag(QString search , QString name, QString value)
     invalidateFilter();
 }
 
-void MyProxyModel::addTag1(QString search, QString name, QString value)
+void MyProxyModel::addTag1(QString name, QString value)
 {
     //Tags.clear();
     //Tags.append({name, value});
     TagFilter1.append({name, value});
-    m_search = search;
+    m_search = "filter";
     invalidateFilter();
 }
 
-void MyProxyModel::addTag2(QString search, QString name, int value1, int value2)
+void MyProxyModel::addTag2(QString name, int value1, int value2)
 {
     //qDebug()<<search << name << value1 << value2;
     //Tags.clear();
     //Tags.append({name,"", value1, value2});
     TagFilter2.append({name, value1, value2});
-    m_search = search;
+    m_search = "filter";
     invalidateFilter();
 }
 
-void MyProxyModel::addTag3(QString search, QString name, int value, QString mark)
+void MyProxyModel::addTag3(QString name, int value, QString mark)
 {
     //Tags.clear();
     //Tags.append({name, "", value ,0 , mark});
     TagFilter3.append({name, value, mark});
-    m_search = search;
+    m_search = "filter";
     invalidateFilter();
 }
 
@@ -328,8 +320,21 @@ QList<QString> MyProxyModel::getTabBarName()
     return tabList;
 }
 
-void MyProxyModel::setSearchCombo(QString text)
+QStringList MyProxyModel::filterCombo(QString text, QString nameFilter)
 {
-    m_searchTextCombo = text;
-    getDataComboBox();
+    QStringList filteredList;
+    if (nameFilter == "String") {
+        for (const QString &item : columnName) {
+            if (item.contains(text, Qt::CaseInsensitive)) {
+                filteredList.append(item);
+            }
+        }
+    } else if (nameFilter == "Int") {
+        for (const QString &item : columnNameInt) {
+            if (item.contains(text, Qt::CaseInsensitive)) {
+                filteredList.append(item);
+            }
+        }
+    }
+    return filteredList;
 }
