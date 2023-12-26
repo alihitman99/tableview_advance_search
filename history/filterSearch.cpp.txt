@@ -1,0 +1,118 @@
+#include "myproxymodel.h"
+#include "mytableview.h"
+#include <QDebug>
+
+MyProxyModel::MyProxyModel(QObject *parent)
+    : QSortFilterProxyModel(parent)
+{
+
+//    int DataTableSize = dynamic_cast<MyTableView*>(sourceModel())->Data.at(0).FieldData.size();
+//    for (int i = 0; i < DataTableSize; i++) {
+//        columnName.append(dynamic_cast<MyTableView*>(sourceModel())->Data.at(0).FieldData.at(i).name);
+//    }
+    for (int i = 0; i < myTableModel.Data.at(0).FieldData.size(); i++) {
+        columnName.append(myTableModel.Data.at(0).FieldData.at(i).name);
+    }
+//    qDebug()<<columnName.at(0);
+//    qDebug()<<dynamic_cast<MyTableView *>(sourceModel())->Data.at(0).FieldData.size();
+}
+
+
+bool MyProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
+{
+    QVariant leftData = sourceModel()->data(left);
+    QVariant rightData = sourceModel()->data(right);
+    return leftData.toString() < rightData.toString();
+}
+
+void MyProxyModel::sortTable(int column)
+{
+    //    qDebug()<<"call sort" << column;
+    if(Asc){
+        qDebug()<<"Ascending Sort>>>>>";
+        sort(column, Qt::AscendingOrder);
+        Asc = false;
+    }
+    else if(!Asc){
+        qDebug()<<"Descending Sort>>>>>";
+        sort(column, Qt::DescendingOrder);
+        Asc = true;
+    }
+    invalidateFilter();
+}
+
+bool MyProxyModel::filterAcceptsColumn(int sourceColumn, const QModelIndex &sourceParent) const
+{
+    if(m_filterColumn == "Main"){
+//        qDebug()<<sourceModel()->headerData(sourceColumn,Qt::Horizontal);
+//        QModelIndex index = sourceModel()->index(0, sourceColumn, sourceParent);
+//        QVariant data = sourceModel()->data(index);
+        QVariant data = sourceModel()->headerData(sourceColumn,Qt::Horizontal);
+//        qDebug()<<data.toString();
+        return data.toString().contains(columnName.at(0), Qt::CaseInsensitive) ||
+               data.toString().contains(columnName.at(1), Qt::CaseInsensitive) ||
+               data.toString().contains(columnName.at(2), Qt::CaseInsensitive) ||
+               data.toString().contains(columnName.at(4), Qt::CaseInsensitive) ||
+               data.toString().contains(columnName.at(5), Qt::CaseInsensitive);
+    }
+    else if(m_filterColumn == "Location"){
+        QVariant data = sourceModel()->headerData(sourceColumn, Qt::Horizontal);
+        return data.toString().contains(columnName.at(0), Qt::CaseInsensitive) ||
+               data.toString().contains(columnName.at(1), Qt::CaseInsensitive) ||
+               data.toString().contains(columnName.at(3), Qt::CaseInsensitive);
+    }
+    return true;
+
+}
+
+
+bool MyProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+{
+
+        for (int i = 0; i < myTableModel.Data.at(0).FieldData.size(); ++i) {
+//            qDebug()<<i;
+            QModelIndex index = sourceModel()->index(sourceRow, i, sourceParent);
+            QVariant data = sourceModel()->data(index);
+//            qDebug()<<data;
+            if(data.toString().contains(m_filterName, Qt::CaseInsensitive))
+                return true;
+        }
+
+//    if(!m_filterName.isEmpty()){
+//            return data.toString().contains(m_filterName, Qt::CaseInsensitive);
+//        }
+    return false;
+}
+
+void MyProxyModel::filterString(QString name)
+{
+    m_filterName = name;
+    qDebug()<< m_filterName;
+    invalidateFilter();
+}
+
+void MyProxyModel::filterStringType(QString type)
+{
+    qDebug()<<type;
+    m_filterName = type;
+    invalidateFilter();
+}
+
+void MyProxyModel::filterStringColumn(QString tabName)
+{
+    m_filterColumn = tabName;
+    invalidateFilter();
+}
+
+
+int MyProxyModel::getColumnCount()
+{
+    return dynamic_cast<MyTableView*>(sourceModel())->getColumnCount();
+}
+
+void MyProxyModel::getDataComboBox()
+{
+    qDebug()<<sourceModel()->headerData(4,Qt::Horizontal);
+    qDebug()<<sourceModel()->headerData(6,Qt::Horizontal);
+}
+
