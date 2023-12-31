@@ -6,8 +6,9 @@
 MyTableView::MyTableView(QObject *parent)
     : QAbstractTableModel(parent)
 {
+    // TEST
     Data.append({{{"color", "green", "Main"},
-                  {"icon", "icons/system-icon.jpg", "Main"},
+                  {"icon", "qrc:/icons/system-icon.jpg", "Main"},
                   {"Name", "reza", "Main"},
                   {"TN", 121, "Main"},
                   {"Callsing", "Cls", "Main"},
@@ -21,11 +22,11 @@ MyTableView::MyTableView(QObject *parent)
                   {"Pos", "Pos2", "Location"},
                   {"Heading", 46, "Location"},
                   {"Speed", "m/s", "Location"},
-                  {"Battle", "icons/battle-icon.jpg", "Main"},
-                  {"Target", "icons/target-icon.jpg", "Main"},
-                  {"More", "icons/more-icon.jpg", "Main"}}});
+                  {"Battle", "qrc:/icons/battle-icon.jpg", "Main"},
+                  {"Target", "qrc:/icons/target-icon.jpg", "Main"},
+                  {"More", "qrc:/icons/more-icon.jpg", "Main"}}});
     Data.append({{{"color", "red", "Main"},
-                  {"icon", "icons/aircraft-icon.jpg", "Main"},
+                  {"icon", "qrc:/icons/aircraft-icon.jpg", "Main"},
                   {"Name", "NFT2425", "Main"},
                   {"TN", 0, "Main"},
                   {"Callsing", "Cls", "Main"},
@@ -39,11 +40,11 @@ MyTableView::MyTableView(QObject *parent)
                   {"Pos", "Pos1", "Location"},
                   {"Heading", 46, "Location"},
                   {"Speed", "m/s", "Location"},
-                  {"Battle", "icons/battle-icon.jpg", "Main"},
-                  {"Target", "icons/target-icon.jpg", "Main"},
-                  {"More", "icons/more-icon.jpg", "Main"}}});
+                  {"Battle", "qrc:/icons/battle-icon.jpg", "Main"},
+                  {"Target", "qrc:/icons/target-icon.jpg", "Main"},
+                  {"More", "qrc:/icons/more-icon.jpg", "Main"}}});
     Data.append({{{"color", "royalblue", "Main"},
-                  {"icon", "icons/station-icon.jpg", "Main"},
+                  {"icon", "qrc:/icons/station-icon.jpg", "Main"},
                   {"Name", "mamad", "Main"},
                   {"TN", 30, "Main"},
                   {"Callsing", "-", "Main"},
@@ -57,11 +58,11 @@ MyTableView::MyTableView(QObject *parent)
                   {"Pos", "Pos3", "Location"},
                   {"Heading", 46, "Location"},
                   {"Speed", "m/s", "Location"},
-                  {"Battle", "icons/battle-icon.jpg", "Main"},
-                  {"Target", "icons/target-icon.jpg", "Main"},
-                  {"More", "icons/more-icon.jpg", "Main"}}});
+                  {"Battle", "qrc:/icons/battle-icon.jpg", "Main"},
+                  {"Target", "qrc:/icons/target-icon.jpg", "Main"},
+                  {"More", "qrc:/icons/more-icon.jpg", "Main"}}});
     Data.append({{{"color", "pink", "Main"},
-                  {"icon", "icons/station-icon.jpg", "Main"},
+                  {"icon", "qrc:/icons/station-icon.jpg", "Main"},
                   {"Name", "ahmad", "Main"},
                   {"TN", 40, "Main"},
                   {"Callsing", "-", "Main"},
@@ -75,11 +76,11 @@ MyTableView::MyTableView(QObject *parent)
                   {"Pos", "Pos4", "Location"},
                   {"Heading", 46, "Location"},
                   {"Speed", "m/s", "Location"},
-                  {"Battle", "icons/battle-icon.jpg", "Main"},
-                  {"Target", "icons/target-icon.jpg", "Main"},
-                  {"More", "icons/more-icon.jpg", "Main"}}});
+                  {"Battle", "qrc:/icons/battle-icon.jpg", "Main"},
+                  {"Target", "qrc:/icons/target-icon.jpg", "Main"},
+                  {"More", "qrc:/icons/more-icon.jpg", "Main"}}});
     Data.append({{{"color", "yellow", "Main"},
-                  {"icon", "icons/system-icon.jpg", "Main"},
+                  {"icon", "qrc:/icons/system-icon.jpg", "Main"},
                   {"Name", "sina", "Main"},
                   {"TN", 21, "Main"},
                   {"Callsing", "-", "Main"},
@@ -93,11 +94,11 @@ MyTableView::MyTableView(QObject *parent)
                   {"Pos", "Pos5", "Location"},
                   {"Heading", 46, "Location"},
                   {"Speed", "m/s", "Location"},
-                  {"Battle", "icons/battle-icon.jpg", "Main"},
-                  {"Target", "icons/target-icon.jpg", "Main"},
-                  {"More", "icons/more-icon.jpg", "Main"}}});
+                  {"Battle", "qrc:/icons/battle-icon.jpg", "Main"},
+                  {"Target", "qrc:/icons/target-icon.jpg", "Main"},
+                  {"More", "qrc:/icons/more-icon.jpg", "Main"}}});
     Data.append({{{"color", "orange", "Main"},
-                  {"icon", "icons/station-icon.jpg", "Main"},
+                  {"icon", "qrc:/icons/station-icon.jpg", "Main"},
                   {"Name", "farhad", "Main"},
                   {"TN", 15, "Main"},
                   {"Callsing", "-", "Main"},
@@ -111,11 +112,11 @@ MyTableView::MyTableView(QObject *parent)
                   {"Pos", "Pos6", "Location"},
                   {"Heading", 46, "Location"},
                   {"Speed", "m/s", "Location"},
-                  {"Battle", "icons/battle-icon.jpg", "Main"},
-                  {"Target", "icons/target-icon.jpg", "Main"},
-                  {"More", "icons/more-icon.jpg", "Main"}}});
+                  {"Battle", "qrc:/icons/battle-icon.jpg", "Main"},
+                  {"Target", "qrc:/icons/target-icon.jpg", "Main"},
+                  {"More", "qrc:/icons/more-icon.jpg", "Main"}}});
     Data.append({{{"color", "red", "Main"},
-                  {"icon", "icons/aircraft-icon.jpg", "Main"},
+                  {"icon", "qrc:/icons/aircraft-icon.jpg", "Main"},
                   {"Name", "shahab", "Main"},
                   {"TN", 0, "Main"},
                   {"Callsing", "Cls", "Main"},
@@ -129,11 +130,11 @@ MyTableView::MyTableView(QObject *parent)
                   {"Pos", "Pos7", "Location"},
                   {"Heading", 46, "Location"},
                   {"Speed", "m/s", "Location"},
-                  {"Battle", "icons/battle-icon.jpg", "Main"},
-                  {"Target", "icons/target-icon.jpg", "Main"},
-                  {"More", "icons/more-icon.jpg", "Main"}}});
+                  {"Battle", "qrc:/icons/battle-icon.jpg", "Main"},
+                  {"Target", "qrc:/icons/target-icon.jpg", "Main"},
+                  {"More", "qrc:/icons/more-icon.jpg", "Main"}}});
     Data.append({{{"color", "pink", "Main"},
-                  {"icon", "icons/system-icon.jpg", "Main"},
+                  {"icon", "qrc:/icons/system-icon.jpg", "Main"},
                   {"Name", "alireza", "Main"},
                   {"TN", 4, "Main"},
                   {"Callsing", "-", "Main"},
@@ -147,11 +148,11 @@ MyTableView::MyTableView(QObject *parent)
                   {"Pos", "Pos8", "Location"},
                   {"Heading", 46, "Location"},
                   {"Speed", "m/s", "Location"},
-                  {"Battle", "icons/battle-icon.jpg", "Main"},
-                  {"Target", "icons/target-icon.jpg", "Main"},
-                  {"More", "icons/more-icon.jpg", "Main"}}});
+                  {"Battle", "qrc:/icons/battle-icon.jpg", "Main"},
+                  {"Target", "qrc:/icons/target-icon.jpg", "Main"},
+                  {"More", "qrc:/icons/more-icon.jpg", "Main"}}});
     Data.append({{{"color", "brown", "Main"},
-                  {"icon", "icons/station-icon.jpg", "Main"},
+                  {"icon", "qrc:/icons/station-icon.jpg", "Main"},
                   {"Name", "mehrdad", "Main"},
                   {"TN", 5, "Main"},
                   {"Callsing", "-", "Main"},
@@ -165,11 +166,11 @@ MyTableView::MyTableView(QObject *parent)
                   {"Pos", "Pos9", "Location"},
                   {"Heading", 46, "Location"},
                   {"Speed", "m/s", "Location"},
-                  {"Battle", "icons/battle-icon.jpg", "Main"},
-                  {"Target", "icons/target-icon.jpg", "Main"},
-                  {"More", "icons/more-icon.jpg", "Main"}}});
+                  {"Battle", "qrc:/icons/battle-icon.jpg", "Main"},
+                  {"Target", "qrc:/icons/target-icon.jpg", "Main"},
+                  {"More", "qrc:/icons/more-icon.jpg", "Main"}}});
     Data.append({{{"color", "yellow", "Main"},
-                  {"icon", "icons/aircraft-icon.jpg", "Main"},
+                  {"icon", "qrc:/icons/aircraft-icon.jpg", "Main"},
                   {"Name", "hossein", "Main"},
                   {"TN", 32, "Main"},
                   {"Callsing", "Cls", "Main"},
@@ -183,11 +184,11 @@ MyTableView::MyTableView(QObject *parent)
                   {"Pos", "Pos1", "Location"},
                   {"Heading", 46, "Location"},
                   {"Speed", "m/s", "Location"},
-                  {"Battle", "icons/battle-icon.jpg", "Main"},
-                  {"Target", "icons/target-icon.jpg", "Main"},
-                  {"More", "icons/more-icon.jpg", "Main"}}});
+                  {"Battle", "qrc:/icons/battle-icon.jpg", "Main"},
+                  {"Target", "qrc:/icons/target-icon.jpg", "Main"},
+                  {"More", "qrc:/icons/more-icon.jpg", "Main"}}});
     Data.append({{{"color", "green", "Main"},
-                  {"icon", "icons/system-icon.jpg", "Main"},
+                  {"icon", "qrc:/icons/system-icon.jpg", "Main"},
                   {"Name", "hassan", "Main"},
                   {"TN", 100, "Main"},
                   {"Callsing", "-", "Main"},
@@ -201,9 +202,9 @@ MyTableView::MyTableView(QObject *parent)
                   {"Pos", "Pos2", "Location"},
                   {"Heading", 46, "Location"},
                   {"Speed", "m/s", "Location"},
-                  {"Battle", "icons/battle-icon.jpg", "Main"},
-                  {"Target", "icons/target-icon.jpg", "Main"},
-                  {"More", "icons/more-icon.jpg", "Main"}}});
+                  {"Battle", "qrc:/icons/battle-icon.jpg", "Main"},
+                  {"Target", "qrc:/icons/target-icon.jpg", "Main"},
+                  {"More", "qrc:/icons/more-icon.jpg", "Main"}}});
 
     //    Data.append({{"color", "green","Main"},{"Name", "ahmad","Main"},{"type","train","Main"},{"latitude",10,"Location"}});
     //    Data.append({"Name", "train", "Main", {{"train", "green","iconSource"}}});
@@ -213,6 +214,7 @@ MyTableView::MyTableView(QObject *parent)
     //    for (auto &dataFor : Data) {
     //        qDebug()<<dataFor.FieldData.at(0).value;
     //    }
+    // ENDTEST
 
     selectionModel = new QItemSelectionModel();
 }

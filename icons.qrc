@@ -1,2 +1,25 @@
-<!DOCTYPE RCC>
-<RCC version="1.0"/>
+<RCC>
+    <qresource prefix="/">
+        <file>icons/aircraft-icon.jpg</file>
+        <file>icons/airplane.png</file>
+        <file>icons/battle-icon.jpg</file>
+        <file>icons/close-icon.jpg</file>
+        <file>icons/delete-icon.jpg</file>
+        <file>icons/down-icon.jpg</file>
+        <file>icons/goto-icon.jpg</file>
+        <file>icons/left-icon.jpg</file>
+        <file>icons/more-icon.jpg</file>
+        <file>icons/motor.png</file>
+        <file>icons/right-icon.jpg</file>
+        <file>icons/rocket.png</file>
+        <file>icons/search-icon.jpg</file>
+        <file>icons/station-icon.jpg</file>
+        <file>icons/system-icon.jpg</file>
+        <file>icons/target-icon.jpg</file>
+        <file>icons/taxi.png</file>
+        <file>icons/taxii.jpg</file>
+        <file>icons/track-icon.jpg</file>
+        <file>icons/train.png</file>
+        <file>icons/up-icon.jpg</file>
+    </qresource>
+</RCC>

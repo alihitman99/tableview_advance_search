@@ -32,6 +32,7 @@ qt_add_qml_module(apptableViewHoosham
     RESOURCES icons/delete-icon.jpg icons/goto-icon.jpg icons/track-icon.jpg
     SOURCES manager.h manager.cpp
     QML_FILES MyTableView.qml
+    RESOURCES Components.qrc
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -43,6 +44,10 @@ set_target_properties(apptableViewHoosham PROPERTIES
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
+)
+
+qt_add_resources(apptableViewHoosham Components
+    FILES MyTableView.qml icons
 )
 
 target_link_libraries(apptableViewHoosham

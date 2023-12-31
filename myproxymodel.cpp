@@ -20,6 +20,9 @@ MyProxyModel::MyProxyModel(QObject *parent)
         }
     }
 
+    MyTableView *table = new MyTableView;
+    setSourceModel(table);
+
     //    qDebug()<<columnNameInt;
     //    qDebug()<<dynamic_cast<MyTableView *>(sourceModel())->Data.at(0).FieldData.size();
 }
