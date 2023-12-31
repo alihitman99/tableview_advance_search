@@ -90,9 +90,14 @@ ComboBox{
         Popup {
             id: popupCombo
             y: comboFilter1.height - 1
-            width: comboFilter1.width
+            width: comboFilter1.width * 2
             implicitHeight: contentItem.implicitHeight
             padding: 1
+            enter: Transition {
+                NumberAnimation { property: "opacity"; from: 0.0; to: 1.0 }}
+
+            exit:Transition {
+                NumberAnimation { property: "opacity"; from: 1.0; to: 0.0 }}
 
             contentItem: ListView {
                 id: listCombo
@@ -102,11 +107,20 @@ ComboBox{
                 currentIndex: comboFilter1.highlightedIndex
                 //visible: false
                 ScrollIndicator.vertical: ScrollIndicator { }
+
+
             }
 
             background: Rectangle {
                 border.color: "#21be2b"
                 radius: 2
+            }
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    txtContentItem.text = comboFilter1.textAt(comboFilter1.highlightedIndex)
+                    popup.close()
+                }
             }
         }
         /*Popup {

@@ -67,7 +67,7 @@ bool MyProxyModel::filterAcceptsColumn(int sourceColumn, const QModelIndex &sour
         QVariant data = sourceModel()->headerData(sourceColumn, Qt::Horizontal);
         bool result = false;
         for (int i = 0; i < columnName.size(); ++i) {
-            if(i <= Ecolumn::EName || i >= Ecolumn::ELatitude){
+            if (i <= Ecolumn::EName || i >= Ecolumn::ELatitude) {
                 result = result || data.toString().contains(columnName.at(i), Qt::CaseInsensitive);
             }
         }
@@ -134,22 +134,36 @@ bool MyProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePare
         return result1 && result2 && result3 && result4 && res;
     }
 
-//    if(m_search == "filterAllTable"){
-//        bool res = false;
-//        //qDebug()<<m_filterName;
-//        int itrator = myTableModel.Data.at(0).FieldData.size();
-//        for (int i = 0; i < itrator; ++i) {
-//            QModelIndex index = sourceModel()->index(sourceRow, i, sourceParent);
-//            QVariant data = sourceModel()->data(index);
-//            //qDebug()<<data;
-//            if(data.toString().contains(m_filterName, Qt::CaseInsensitive))
-//                res = res || data.toString().contains(m_filterName, Qt::CaseInsensitive);
-//        }
-//        return res;
-//    }
+    if (m_search == "attack") {
+        bool resultAttaker = attakerList.isEmpty();
+        //qDebug() << attakerList.at(0);
+        for (int iter = 0; iter < columnName.size(); ++iter) {
+            QModelIndex index = sourceModel()->index(sourceRow, Ecolumn::EName, sourceParent);
+            QVariant data = sourceModel()->data(index);
+            for (int i = 0; i < attakerList.size(); ++i) {
+                if (data.toString() == attakerList.at(i)) {
+                    resultAttaker = resultAttaker || true;
+                }
+            }
+        }
+        return resultAttaker;
+    }
+
+    //    if(m_search == "filterAllTable"){
+    //        bool res = false;
+    //        //qDebug()<<m_filterName;
+    //        int itrator = myTableModel.Data.at(0).FieldData.size();
+    //        for (int i = 0; i < itrator; ++i) {
+    //            QModelIndex index = sourceModel()->index(sourceRow, i, sourceParent);
+    //            QVariant data = sourceModel()->data(index);
+    //            //qDebug()<<data;
+    //            if(data.toString().contains(m_filterName, Qt::CaseInsensitive))
+    //                res = res || data.toString().contains(m_filterName, Qt::CaseInsensitive);
+    //        }
+    //        return res;
+    //    }
     //qDebug()<<"cx";
     return true;
-
 }
 
 void MyProxyModel::filterString(QString search, QString value)
@@ -229,14 +243,12 @@ QList<QString> MyProxyModel::getColorFilter()
     return colorList;
 }
 
-
-
-void MyProxyModel::addTag(QString search , QString name, QString value)
+void MyProxyModel::addTag(QString name, QString value)
 {
     //qDebug()<<name << value;
     //Tags.clear();
     Tags.append({name, value});
-    m_search = search;
+    m_search = "filter";
     invalidateFilter();
 }
 
@@ -337,4 +349,11 @@ QStringList MyProxyModel::filterCombo(QString text, QString nameFilter)
         }
     }
     return filteredList;
+}
+
+void MyProxyModel::attacker(QString name)
+{
+    attakerList.append({name, "mamad", "ahmad", "farhad"});
+    m_search = "attack";
+    invalidateFilter();
 }

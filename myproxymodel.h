@@ -1,7 +1,9 @@
 #ifndef MYPROXYMODEL_H
 #define MYPROXYMODEL_H
+
 #include <QSortFilterProxyModel>
 #include <QObject>
+
 #include "mytableview.h"
 
 class MyProxyModel : public QSortFilterProxyModel
@@ -39,7 +41,7 @@ public:
     Q_INVOKABLE QList<QString> getDataComboBox();
     Q_INVOKABLE QList<QString> getDataComboBoxInt();
     Q_INVOKABLE QList<QString> getColorFilter();
-    Q_INVOKABLE void addTag(QString search , QString name, QString value);
+    Q_INVOKABLE void addTag(QString name, QString value);
     Q_INVOKABLE void addTag1(QString name, QString value);
     Q_INVOKABLE void addTag2(QString name, int value1, int value2);
     Q_INVOKABLE void addTag3(QString name, int value, QString mark);
@@ -57,6 +59,8 @@ public:
     Q_INVOKABLE QList<QString> getTabBarName();
 
     Q_INVOKABLE QStringList filterCombo(QString text, QString nameFilter);
+
+    Q_INVOKABLE void attacker(QString name);
 
 signals:
     //void comboItemChanged();
@@ -95,6 +99,8 @@ private:
     QList<FilterTag1> TagFilter1;
     QList<FilterTag2> TagFilter2;
     QList<FilterTag3> TagFilter3;
+
+    QStringList attakerList;
 
     enum Ecolumn {
         EColor = 0,

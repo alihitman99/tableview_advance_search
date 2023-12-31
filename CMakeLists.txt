@@ -29,6 +29,9 @@ qt_add_qml_module(apptableViewHoosham
     RESOURCES icons.qrc
     RESOURCES icons/aircraft-icon.jpg icons/battle-icon.jpg icons/close-icon.jpg icons/down-icon.jpg icons/left-icon.jpg icons/more-icon.jpg icons/right-icon.jpg icons/search-icon.jpg icons/station-icon.jpg icons/system-icon.jpg icons/target-icon.jpg icons/up-icon.jpg
     QML_FILES ComboFilter.qml
+    RESOURCES icons/delete-icon.jpg icons/goto-icon.jpg icons/track-icon.jpg
+    SOURCES manager.h manager.cpp
+    QML_FILES MyTableView.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
