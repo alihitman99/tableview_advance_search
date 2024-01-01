@@ -3,14 +3,16 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 Window {
-    id: rootItem
+    id: window
 
     visible: true
 
     width: 1000
     height: 630
 
-    color: "red"
+    color: "#DEE3E6"
+
+
 
     // TEST
     //    Component {
@@ -25,20 +27,6 @@ Window {
     // ENDTEST
     ColumnLayout {
         anchors.fill: parent
-
-        Rectangle {
-            Layout.fillWidth: true
-            Layout.preferredHeight: 50
-            color: 'lightblue'
-
-            Button {
-                text: 'toggle visible'
-                onClicked: {
-
-                    // TODO
-                }
-            }
-        }
 
         Rectangle {
             id: tableViewContainer

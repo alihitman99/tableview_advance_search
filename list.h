@@ -1,28 +1,66 @@
-#ifndef ListProxyModel_H
-#define ListProxyModel_H
+#ifndef ListManager_H
+#define ListManager_H
 
-#include <QSortFilterProxyModel>
+#include <QAbstractTableModel>
+#include <QItemSelectionModel>
 #include <QObject>
+#include <QQmlEngine>
+#include <QQuickItem>
+#include <QSortFilterProxyModel>
 
-#include "mytableview.h"
+//#include "myproxymodel.h"
+class ListModel;
+class ListProxyModel;
+class ListManager;
 
+//--------------------------------ListManager-----------------------
+class ListManager : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QQuickItem *qmlItem READ qmlItem WRITE setQmlItem NOTIFY qmlItemChanged FINAL)
+
+public:
+    explicit ListManager(QQmlEngine *engine);
+
+    QQuickItem *qmlItem() const;
+    void setQmlItem(QQuickItem *newQmlItem);
+    ListProxyModel *proxyModel() const;
+    void setProxyModel(ListProxyModel *newProxyModel);
+
+signals:
+    void qmlItemChanged();
+
+private:
+    void createQml();
+
+private:
+    ListProxyModel *m_proxyModel = nullptr;
+    QQuickItem *m_qmlItem = nullptr;
+    QQmlEngine *m_engine = nullptr;
+};
+
+//--------------------------------------ListProxyModel-------------------------------------
 class ListProxyModel : public QSortFilterProxyModel
 {
-    struct FilterTag{
+    struct FilterTag
+    {
         QString name;
         QString value;
     };
 
-    struct FilterTag1{
+    struct FilterTag1
+    {
         QString name;
         QString value;
     };
-    struct FilterTag2{
+    struct FilterTag2
+    {
         QString name;
         int valueFrom;
         int valueTo;
     };
-    struct FilterTag3{
+    struct FilterTag3
+    {
         QString name;
         int value;
         QString mark;
@@ -71,7 +109,6 @@ protected:
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
 
-
 private:
     //QString m_filterColor;
     QString m_filterName;
@@ -82,9 +119,8 @@ private:
     QString m_searchTextCombo;
 
     QString m_search = ""; //filter check
-    bool Asc = true; //ascending or descending sort
-    MyTableView myTableModel;
-
+    bool Asc = true;       //ascending or descending sort
+    ListModel *listModel = nullptr;
 
     QVector<QString> columnName;
     QVector<QString> columnNameInt;
@@ -123,5 +159,39 @@ private:
         EMore
     };
 };
+//-----------------------------------------ListModel------------------------------------
+class ListModel : public QAbstractTableModel
+{
+    Q_OBJECT
+public:
+    explicit ListModel(QObject *parent = nullptr);
 
-#endif // ListProxyModel_H
+    int rowCount(const QModelIndex & = QModelIndex()) const override;
+    int columnCount(const QModelIndex & = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+    QHash<int, QByteArray> roleNames() const override;
+
+    int getColumnCount();
+    void selectionRow(int rowCount, int idxRow);
+    QItemSelectionModel *selectRowModel();
+
+    struct NodeFieldData
+    {
+        QString name;
+        QVariant value;
+        QString category;
+    };
+
+    struct NodeData
+    {
+        QVector<NodeFieldData> FieldData;
+    };
+
+    QVector<NodeData> Data;
+
+private:
+    QItemSelectionModel *selectionModel;
+};
+
+#endif // ListManager_H

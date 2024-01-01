@@ -2,7 +2,7 @@
 #include "mytableview.h"
 #include <QDebug>
 
-MyProxyModel::MyProxyModel(QObject *parent)
+ListProxyModel::ListProxyModel(QObject *parent)
     : QSortFilterProxyModel(parent)
 {
     //    int DataTableSize = dynamic_cast<MyTableView*>(sourceModel())->Data.at(0).FieldData.size();
@@ -27,14 +27,14 @@ MyProxyModel::MyProxyModel(QObject *parent)
     //    qDebug()<<dynamic_cast<MyTableView *>(sourceModel())->Data.at(0).FieldData.size();
 }
 
-bool MyProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
+bool ListProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
     QVariant leftData = sourceModel()->data(left);
     QVariant rightData = sourceModel()->data(right);
     return leftData.toString() < rightData.toString();
 }
 
-void MyProxyModel::sortTable(int column)
+void ListProxyModel::sortTable(int column)
 {
     //    qDebug()<<"call sort" << column;
     if(Asc){
@@ -50,7 +50,7 @@ void MyProxyModel::sortTable(int column)
     invalidateFilter();
 }
 
-bool MyProxyModel::filterAcceptsColumn(int sourceColumn, const QModelIndex &sourceParent) const
+bool ListProxyModel::filterAcceptsColumn(int sourceColumn, const QModelIndex &sourceParent) const
 {
     if(m_filterColumn == tabList.at(0)){ //Main
         //        qDebug()<<sourceModel()->headerData(sourceColumn,Qt::Horizontal);
@@ -77,11 +77,9 @@ bool MyProxyModel::filterAcceptsColumn(int sourceColumn, const QModelIndex &sour
         return result;
     }
     return true;
-
 }
 
-
-bool MyProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+bool ListProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
     //search Tag all of them
     bool res = m_filterName.isEmpty();
@@ -169,7 +167,7 @@ bool MyProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePare
     return true;
 }
 
-void MyProxyModel::filterString(QString search, QString value)
+void ListProxyModel::filterString(QString search, QString value)
 {
     m_filterName = value;
     //m_search = search;
@@ -178,20 +176,18 @@ void MyProxyModel::filterString(QString search, QString value)
     invalidateFilter();
 }
 
-
-void MyProxyModel::filterStringColumn(QString tabName)
+void ListProxyModel::filterStringColumn(QString tabName)
 {
     m_filterColumn = tabName;
     invalidateFilter();
 }
 
-
-int MyProxyModel::getColumnCount()
+int ListProxyModel::getColumnCount()
 {
     return dynamic_cast<MyTableView*>(sourceModel())->getColumnCount();
 }
 
-QList<QString> MyProxyModel::getDataComboBox()
+QList<QString> ListProxyModel::getDataComboBox()
 {
     //    for (int i = 0; i < myTableModel.Data.at(0).FieldData.size(); ++i) {
     //        //appendItem(sourceModel()->headerData(i, Qt::Horizontal).toString());
@@ -217,12 +213,12 @@ QList<QString> MyProxyModel::getDataComboBox()
     //    return filteredOptions;
 }
 
-QList<QString> MyProxyModel::getDataComboBoxInt()
+QList<QString> ListProxyModel::getDataComboBoxInt()
 {
     return columnNameInt;
 }
 
-QList<QString> MyProxyModel::getColorFilter()
+QList<QString> ListProxyModel::getColorFilter()
 {
     int iter = dynamic_cast<MyTableView*>(sourceModel())->Data.size();
     for (int i = 0; i < iter; ++i) {
@@ -246,7 +242,7 @@ QList<QString> MyProxyModel::getColorFilter()
     return colorList;
 }
 
-void MyProxyModel::addTag(QString name, QString value)
+void ListProxyModel::addTag(QString name, QString value)
 {
     //qDebug()<<name << value;
     //Tags.clear();
@@ -255,7 +251,7 @@ void MyProxyModel::addTag(QString name, QString value)
     invalidateFilter();
 }
 
-void MyProxyModel::addTag1(QString name, QString value)
+void ListProxyModel::addTag1(QString name, QString value)
 {
     //Tags.clear();
     //Tags.append({name, value});
@@ -264,7 +260,7 @@ void MyProxyModel::addTag1(QString name, QString value)
     invalidateFilter();
 }
 
-void MyProxyModel::addTag2(QString name, int value1, int value2)
+void ListProxyModel::addTag2(QString name, int value1, int value2)
 {
     //qDebug()<<search << name << value1 << value2;
     //Tags.clear();
@@ -274,7 +270,7 @@ void MyProxyModel::addTag2(QString name, int value1, int value2)
     invalidateFilter();
 }
 
-void MyProxyModel::addTag3(QString name, int value, QString mark)
+void ListProxyModel::addTag3(QString name, int value, QString mark)
 {
     //Tags.clear();
     //Tags.append({name, "", value ,0 , mark});
@@ -283,8 +279,7 @@ void MyProxyModel::addTag3(QString name, int value, QString mark)
     invalidateFilter();
 }
 
-
-void MyProxyModel::removeTag(QString filterSearch, QString name, QString value1)
+void ListProxyModel::removeTag(QString filterSearch, QString name, QString value1)
 {
     //qDebug()<<filterSearch<<name<<value1;
     if(filterSearch == "colorFilter"){
@@ -318,24 +313,24 @@ void MyProxyModel::removeTag(QString filterSearch, QString name, QString value1)
     invalidateFilter();
 }
 
-void MyProxyModel::selectionRow(int Row, int Column)
+void ListProxyModel::selectionRow(int Row, int Column)
 {
    dynamic_cast<MyTableView*>(sourceModel())->selectionRow(Row, Column);
 }
 
-QItemSelectionModel *MyProxyModel::selectRowModel()
+QItemSelectionModel *ListProxyModel::selectRowModel()
 {
     return dynamic_cast<MyTableView*>(sourceModel())->selectRowModel();
 }
 
-QList<QString> MyProxyModel::getTabBarName()
+QList<QString> ListProxyModel::getTabBarName()
 {
     tabList.append({"Main", "Location", "Assignment", "Detection", "Sends"});
 
     return tabList;
 }
 
-QStringList MyProxyModel::filterCombo(QString text, QString nameFilter)
+QStringList ListProxyModel::filterCombo(QString text, QString nameFilter)
 {
     QStringList filteredList;
     if (nameFilter == "String") {
@@ -354,7 +349,7 @@ QStringList MyProxyModel::filterCombo(QString text, QString nameFilter)
     return filteredList;
 }
 
-void MyProxyModel::attacker(QString name)
+void ListProxyModel::attacker(QString name)
 {
     attakerList.append({name, "mamad", "ahmad", "farhad"});
     m_search = "attack";

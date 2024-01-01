@@ -2,9 +2,9 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 
-#include "manager.h"
-#include "myproxymodel.h"
-#include "mytableview.h"
+#include "list.h"
+//#include "myproxymodel.h"
+//#include "mytableview.h"
 
 int main(int argc, char *argv[])
 {
@@ -12,10 +12,9 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine *engine = new QQmlApplicationEngine;
 
-    Manager *manager = new Manager(engine);
+    ListManager *manager = new ListManager(engine);
 
-    dynamic_cast<MyTableView *>(manager->proxyModel()->sourceModel)->Data.append();
-    manager->append();
+    //manager->append(data);
     //we use myProxyModel and function of tableModel call in proxyModel with dynamic_cast
     //    engine.rootContext()->setContextProperty("tableModel",&table);
     engine->rootContext()->setContextProperty("managerInstance", manager);

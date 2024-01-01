@@ -16,23 +16,26 @@ qt_add_qml_module(apptableViewHoosham
     URI tableViewHoosham
     VERSION 1.0
     QML_FILES Main.qml
-    SOURCES mytableview.h mytableview.cpp
+    SOURCES
     RESOURCES icons.qrc
-    SOURCES myproxymodel.h myproxymodel.cpp
-    QML_FILES ButtonTag.qml
+    SOURCES
+    QML_FILES
     QML_FILES
     SOURCES
     QML_FILES
     QML_FILES
-    QML_FILES SelectColor.qml
+    QML_FILES
     RESOURCES icons/airplane.png icons/motor.png icons/rocket.png icons/taxi.png icons/taxii.jpg icons/train.png
     RESOURCES icons.qrc
     RESOURCES icons/aircraft-icon.jpg icons/battle-icon.jpg icons/close-icon.jpg icons/down-icon.jpg icons/left-icon.jpg icons/more-icon.jpg icons/right-icon.jpg icons/search-icon.jpg icons/station-icon.jpg icons/system-icon.jpg icons/target-icon.jpg icons/up-icon.jpg
-    QML_FILES ComboFilter.qml
+    QML_FILES
     RESOURCES icons/delete-icon.jpg icons/goto-icon.jpg icons/track-icon.jpg
-    SOURCES manager.h manager.cpp
+    SOURCES list.h list.cpp
     QML_FILES MyTableView.qml
     RESOURCES Components.qrc
+    QML_FILES
+    QML_FILES
+    QML_FILES Property.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

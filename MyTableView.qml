@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Effects
@@ -6,19 +7,13 @@ import Qt.labs.qmlmodels
 
 Rectangle {
     id: rootItem
-    width: 1000
-    height: 630
+    width: Window.width
+    height: Window.height
     visible: true
     color: style.backgroundColor
-
-    property var tableModel: []
-
-    Component.onCompleted: {
-
-        //tableModel.filterStringColumn("")
-    }
-    QtObject {
+    Rectangle {
         id: style
+        readonly property int widthStyle: 200
         readonly property color backgroundColor: "#DEE3E6"
         readonly property color foregroundColor: "#003569"
         readonly property color disableColor: Qt.rgba(foregroundColor.r,
@@ -47,10 +42,17 @@ Rectangle {
         readonly property color selectColor: "#B6C0CA"
         readonly property real monitorRatio: 1.3
         readonly property string fontFamily: "Roboto"
-        readonly property double fontPointSize: 11 / monitorRatio
+        readonly property real fontPointSize: 17 / monitorRatio
         function isNumeric(s) {
             return !isNaN(s - parseFloat(s))
         }
+    }
+
+    property var tableModel: undefined
+
+    Component.onCompleted: {
+
+        //tableModel.filterStringColumn("")
     }
 
     Rectangle {
@@ -251,8 +253,8 @@ Rectangle {
 
                             Repeater {
                                 id: colorRepeater
-                                model: tableModel.getColorFilter(
-                                           ) //["#EF2929","#FCAF3E","#FCE94F","#8AE234","#EF2929","#FCAF3E","#FCE94F","#8AE234","#729FCF","#AD7FA8","#E9B96E","#8AE234","#729FCF","#AD7FA8","#E9B96E"]
+                                model: tableModel ? tableModel.getColorFilter(
+                                                        ) : undefined //["#EF2929","#FCAF3E","#FCE94F","#8AE234","#EF2929","#FCAF3E","#FCE94F","#8AE234","#729FCF","#AD7FA8","#E9B96E","#8AE234","#729FCF","#AD7FA8","#E9B96E"]
                                 delegate: Rectangle {
                                     required property var modelData
                                     width: 24 / style.monitorRatio
@@ -315,14 +317,14 @@ Rectangle {
                 }
                 Rectangle {
                     id: filterString
-                    width: style.width / 4.65
-                    height: 28 / style.monitorRatio
+                    width: style.widthStyle / 4.65
+                    height: 28 / 1.3
                     //Layout.leftMargin: 20 / style.monitorRatio
                     radius: 15
                     property color s: "black"
                     color: Qt.rgba(s.r, s.g, s.b, .04)
                     Rectangle {
-                        width: style.width / 4.65 - 3
+                        width: style.widthStyle / 4.65 - 3
                         height: 28 / style.monitorRatio - 3
                         anchors.bottom: parent.bottom
                         anchors.right: parent.right
@@ -337,24 +339,12 @@ Rectangle {
                                 property real txtWidth: 0
                                 //Layout.minimumWidth: 50
                                 //Layout.maximumWidth: 50
-                                model: tableModel.getDataComboBox(
-                                           ) //["SEX" , "FUCK" , "PUSSY" , "VIRGINAwwwwwwwwww" , "CUNT" , "ASS" , "MOMO" , "VOLVO"]
+                                model: tableModel ? tableModel.getDataComboBox(
+                                                        ) : undefined
 
-                                function findLongestString(stringList) {
-                                    var longest = ""
-
-                                    for (var i = 0; i < stringList.length; i++) {
-                                        if (stringList[i].length > longest.length) {
-                                            longest = stringList[i]
-                                        }
-                                    }
-
-                                    return longest
-                                }
                                 Text {
                                     id: maximumText
-                                    text: "Longest String: " + control.findLongestString(
-                                              control.model)
+                                    text: "Longest String: "
                                     anchors.centerIn: parent
                                     Component.onCompleted: {
                                         control.txtWidth = maximumText.width
@@ -376,8 +366,8 @@ Rectangle {
                                         //Layout.leftMargin: 20
                                         text: control.textRole ? (Array.isArray(
                                                                       control.model) ? modelData[control.textRole] : model[control.textRole]) : modelData
-                                        color: style.foregroundColor
-                                        font.family: style.fontFamily
+                                        color: "#003569"
+                                        font.family: "Roboto"
                                         font.pixelSize: 14 / style.monitorRatio
                                     }
 
@@ -554,14 +544,14 @@ Rectangle {
                 }
                 Rectangle {
                     id: filterRange
-                    width: style.width / 3.55
+                    width: style.widthStyle / 3.55
                     height: 28 / style.monitorRatio
                     Layout.leftMargin: 15 / style.monitorRatio
                     radius: 15
                     property color s: "black"
                     color: Qt.rgba(s.r, s.g, s.b, .04)
                     Rectangle {
-                        width: style.width / 3.55 - 3
+                        width: style.widthStyle / 3.55 - 3
                         height: 28 / style.monitorRatio - 3
                         anchors.bottom: parent.bottom
                         anchors.right: parent.right
@@ -577,24 +567,12 @@ Rectangle {
                                 property real txtWidth: 0
                                 //Layout.minimumWidth: 50
                                 //Layout.maximumWidth: 50
-                                model: tableModel.getDataComboBoxInt(
-                                           ) //["SEX" , "FUCK" , "PUSSY" , "VIRGINAwwwwwwwwww" , "CUNT" , "ASS" , "MOMO" , "VOLVO"]
+                                model: tableModel ? tableModel.getDataComboBoxInt(
+                                                        ) : undefined
 
-                                function findLongestString(stringList) {
-                                    var longest = ""
-
-                                    for (var i = 0; i < stringList.length; i++) {
-                                        if (stringList[i].length > longest.length) {
-                                            longest = stringList[i]
-                                        }
-                                    }
-
-                                    return longest
-                                }
                                 Text {
                                     id: maximumText1
-                                    text: "Longest String: " + control.findLongestString(
-                                              control.model)
+                                    text: "Longest String: "
                                     anchors.centerIn: parent
                                     Component.onCompleted: {
                                         control2.txtWidth = maximumText1.width
@@ -615,8 +593,8 @@ Rectangle {
                                         //Layout.leftMargin: 20
                                         text: control2.textRole ? (Array.isArray(
                                                                        control2.model) ? modelData[control2.textRole] : model[control2.textRole]) : modelData
-                                        color: style.foregroundColor
-                                        font.family: style.fontFamily
+                                        color: "#003569"
+                                        font.family: "Roboto"
                                         font.pixelSize: 14 / style.monitorRatio
                                     }
 
@@ -837,14 +815,14 @@ Rectangle {
 
                 Rectangle {
                     id: filterString11
-                    width: style.width / 4.65
+                    width: style.widthStyle / 4.65
                     height: 28 / style.monitorRatio
                     Layout.leftMargin: 15 / style.monitorRatio
                     radius: 15
                     property color s: "black"
                     color: Qt.rgba(s.r, s.g, s.b, .04)
                     Rectangle {
-                        width: style.width / 4.65 - 3
+                        width: style.widthStyle / 4.65 - 3
                         height: 28 / style.monitorRatio - 3
                         anchors.bottom: parent.bottom
                         anchors.right: parent.right
@@ -861,24 +839,12 @@ Rectangle {
                                 property real txtWidth: 0
                                 //Layout.minimumWidth: 50
                                 //Layout.maximumWidth: 50
-                                model: tableModel.getDataComboBoxInt(
-                                           ) //["SEX" , "FUCK" , "PUSSY" , "VIRGINAwwwwwwwwww" , "CUNT" , "ASS" , "MOMO" , "VOLVO"]
+                                model: tableModel ? tableModel.getDataComboBoxInt(
+                                                        ) : undefined
 
-                                function findLongestString(stringList) {
-                                    var longest = ""
-
-                                    for (var i = 0; i < stringList.length; i++) {
-                                        if (stringList[i].length > longest.length) {
-                                            longest = stringList[i]
-                                        }
-                                    }
-
-                                    return longest
-                                }
                                 Text {
                                     id: maximumText3
-                                    text: "Longest String: " + control3.findLongestString(
-                                              control3.model)
+                                    text: "Longest String: "
                                     anchors.centerIn: parent
                                     Component.onCompleted: {
                                         control3.txtWidth = maximumText3.width
@@ -899,8 +865,8 @@ Rectangle {
                                         //Layout.leftMargin: 20
                                         text: control3.textRole ? (Array.isArray(
                                                                        control3.model) ? modelData[control3.textRole] : model[control3.textRole]) : modelData
-                                        color: style.foregroundColor
-                                        font.family: style.fontFamily
+                                        color: "#003569"
+                                        font.family: "Roboto"
                                         font.pixelSize: 14 / style.monitorRatio
                                     }
 
@@ -1035,8 +1001,8 @@ Rectangle {
                                                     contentItem: Text {
                                                         text: modelData
                                                         //width: 50
-                                                        color: style.foregroundColor
-                                                        font.family: style.fontFamily
+                                                        color: "#003569"
+                                                        font.family: "Roboto"
                                                         font.pixelSize: 14 / style.monitorRatio
                                                     }
                                                     onClicked: {
@@ -1129,7 +1095,7 @@ Rectangle {
                 }
             }
             RowLayout {
-                width: style.width
+                width: style.widthStyle
                 id: flowRow
                 height: 50 / 1.3
                 visible: false
@@ -1428,10 +1394,9 @@ Rectangle {
             width: parent.width
             anchors.leftMargin: 20
             Component.onCompleted: {
-                tableModel.filterStringColumn(
-                            repeater.itemAt(
-                                0).text) //tableModel.getTabBarName()[0]
-                console.log(repeater.itemAt(0).text)
+
+                //tableModel.filterStringColumn(repeater.itemAt(0).text)
+                //console.log(tabMain.modelData)
             }
 
             readonly property color foregroundColor: "#003569"
@@ -1441,12 +1406,22 @@ Rectangle {
                                                           0.5)
             Repeater {
                 id: repeater
-                model: tableModel.getTabBarName()
+                model: tableModel ? tableModel.getTabBarName() : undefined
+                Component.onCompleted: {
+
+                    //tableModel.filterStringColumn(repeater.itemAt(0).text)
+                    //console.log(repeater)
+                }
 
                 TabButton {
                     id: tabMain
                     required property var model
                     required property var modelData
+                    Component.onCompleted: {
+
+                        tableModel.filterStringColumn(repeater.itemAt(0).text)
+                        //console.log(repeater.itemAt(0).text)
+                    }
 
                     text: modelData
 
@@ -1475,8 +1450,8 @@ Rectangle {
                         //anchors.fill: parent
                         anchors.centerIn: parent
                         text: tabMain.text
-                        font.family: style.fontFamily
-                        font.pointSize: 17 / style.monitorRatio
+                        font.family: "Roboto"
+                        font.pointSize: 17 / 1.3
                         color: tabBar.currentIndex
                                === model.index ? tabBar.foregroundColor : tabBar.disableColor
                     }
@@ -1511,9 +1486,9 @@ Rectangle {
                 }
                 Text {
                     text: display
-                    color: style.foregroundColor
-                    font.family: style.fontFamily
-                    font.pointSize: 17 / style.monitorRatio
+                    color: "#003569"
+                    font.family: "Roboto"
+                    font.pointSize: 17 / 1.3
                     //anchors.centerIn: parent
                     anchors.left: model.column === 2 ? parent.left : undefined
                     anchors.centerIn: model.column === 2 ? undefined : parent
@@ -1560,10 +1535,9 @@ Rectangle {
                 //                return tableview.rows % IndexRow
             }
 
-            model: tableModel //tableModel //tableModel
+            model: tableModel ? tableModel : undefined //tableModel //tableModel
 
-            selectionModel: tableModel.selectRowModel
-
+            //            selectionModel: tableModel ? tableModel.selectRowModel : undefined
             delegate: Rectangle {
                 id: rectDelegate
                 //implicitWidth: 120 //rootItem.width / tableModel.columnCount() //120 //rootItem.height / 3
@@ -1696,8 +1670,8 @@ Rectangle {
                                 text: modelData
                                 anchors.left: imgMenuTable.right
                                 //width: 50
-                                color: style.foregroundColor
-                                font.family: style.fontFamily
+                                color: "#003569"
+                                font.family: "Roboto"
                                 font.pixelSize: 17 / style.monitorRatio
                             }
                         }
