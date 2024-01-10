@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QQmlEngine>
 #include <QQuickItem>
+#include <QRandomGenerator>
 #include <QSortFilterProxyModel>
 
 //#include "myproxymodel.h"
@@ -26,6 +27,7 @@ public:
     void setQmlItem(QQuickItem *newQmlItem);
     ListProxyModel *proxyModel() const;
     void setProxyModel(ListProxyModel *newProxyModel);
+    //QString changeModel;
 
 signals:
     void qmlItemChanged();
@@ -34,9 +36,10 @@ private:
     void createQml();
 
 private:
-    ListProxyModel *m_proxyModel = nullptr;
     QQuickItem *m_qmlItem = nullptr;
     QQmlEngine *m_engine = nullptr;
+    ListProxyModel *m_proxyModel = nullptr;
+    ListProxyModel *m_newProxyModel = nullptr;
 };
 
 //--------------------------------------ListProxyModel-------------------------------------
@@ -73,9 +76,9 @@ public:
     explicit ListProxyModel(QObject *parent = nullptr);
     Q_INVOKABLE void sortTable(int column);
     bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const;
+    Q_INVOKABLE void nodeTypeFilter(QString type);
     Q_INVOKABLE void filterString(QString search, QString value);
     Q_INVOKABLE void filterStringColumn(QString tabName);
-    Q_INVOKABLE int getColumnCount();
     Q_INVOKABLE QList<QString> getDataComboBox();
     Q_INVOKABLE QList<QString> getDataComboBoxInt();
     Q_INVOKABLE QList<QString> getColorFilter();
@@ -85,9 +88,6 @@ public:
     Q_INVOKABLE void addTag3(QString name, int value, QString mark);
     Q_INVOKABLE void removeTag(QString filterSearch, QString name, QString value);
 
-    Q_INVOKABLE void selectionRow(int Row, int Column);
-    Q_INVOKABLE QItemSelectionModel *selectRowModel();
-
     //QStringList comboItem() const;
     //void setComboItem(const QStringList &newComboItem);
 
@@ -95,10 +95,14 @@ public:
     //void setComboItemList(const QStringList &newComboItemList);
 
     Q_INVOKABLE QList<QString> getTabBarName();
-
     Q_INVOKABLE QStringList filterCombo(QString text, QString nameFilter);
 
+    // dynamic_cast to ListModel
+    Q_INVOKABLE void selectionRow(int Row, int Column);
+    Q_INVOKABLE QItemSelectionModel *selectRowModel();
     Q_INVOKABLE void attacker(QString name);
+    Q_INVOKABLE void setChangeModel(QString checkModel);
+    Q_INVOKABLE QList<QString> getFilterData();
 
 signals:
     //void comboItemChanged();
@@ -111,6 +115,7 @@ protected:
 
 private:
     //QString m_filterColor;
+    QString m_filterType;
     QString m_filterName;
     QString m_filterColumn;
     //int m_filterFrom;
@@ -126,6 +131,7 @@ private:
     QVector<QString> columnNameInt;
     QVector<QString> colorList;
     QVector<QString> tabList;
+    QVector<QString> FilterDataList;
 
     QVector<QString> comboSearch;
     //QStringList m_comboItem;
@@ -172,7 +178,6 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    int getColumnCount();
     void selectionRow(int rowCount, int idxRow);
     QItemSelectionModel *selectRowModel();
 
@@ -189,9 +194,15 @@ public:
     };
 
     QVector<NodeData> Data;
+    QVector<NodeData> *DataAttacker = new QVector<NodeData>;
+    //QVector<NodeData> *DataAttack = new QVector<NodeData>;
+
+    Q_INVOKABLE void attacker(QString name);
+    Q_INVOKABLE void setChangeModel(QString checkModel);
 
 private:
     QItemSelectionModel *selectionModel;
+    QString modelType;
 };
 
 #endif // ListManager_H

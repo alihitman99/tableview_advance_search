@@ -20,22 +20,25 @@ void ListManager::createQml()
             qDebug() << comp->errorString();
         }
 
-        qDebug() << "something";
+        //qDebug() << m_proxyModel << m_newProxyModel;
         m_qmlItem = qobject_cast<QQuickItem *>(comp->create());
         m_qmlItem->setProperty("tableModel", QVariant::fromValue(m_proxyModel));
+        
     });
 
-    qDebug() << "it is what it is";
+    //qDebug() << "it is what it is";
     comp->loadUrl(QUrl("qrc:/MyTableView.qml"));
 }
 
 ListProxyModel *ListManager::proxyModel() const
 {
+    //qDebug() << "chch";
     return m_proxyModel;
 }
 
 void ListManager::setProxyModel(ListProxyModel *newProxyModel)
 {
+    //qDebug() << "chchch";
     m_proxyModel = newProxyModel;
 }
 
@@ -81,13 +84,15 @@ ListProxyModel::ListProxyModel(QObject *parent)
 bool ListProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
     QVariant leftData = sourceModel()->data(left);
+
     QVariant rightData = sourceModel()->data(right);
+    //qDebug() << leftData << rightData;
     return leftData.toString() < rightData.toString();
 }
 
 void ListProxyModel::sortTable(int column)
 {
-    //    qDebug()<<"call sort" << column;
+    //qDebug() << "call sort" << column;
     if (Asc) {
         qDebug() << "Ascending Sort>>>>>";
         sort(column, Qt::AscendingOrder);
@@ -131,7 +136,7 @@ bool ListProxyModel::filterAcceptsColumn(int sourceColumn, const QModelIndex &so
 bool ListProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
     //search Tag all of them
-    bool res = m_filterName.isEmpty();
+    bool resultName = m_filterName.isEmpty();
     bool result1 = Tags.isEmpty();
     bool result2 = TagFilter1.isEmpty();
     bool result3 = TagFilter2.isEmpty();
@@ -187,29 +192,37 @@ bool ListProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePa
                 }
             }
             if (data.toString().contains(m_filterName, Qt::CaseInsensitive)) {
-                res = res || data.toString().contains(m_filterName, Qt::CaseInsensitive);
+                resultName = resultName
+                             || data.toString().contains(m_filterName, Qt::CaseInsensitive);
             }
         }
-        return result1 && result2 && result3 && result4 && res;
+        return result1 && result2 && result3 && result4 && resultName;
     }
 
-    if (m_search == "attack") {
-        bool resultAttaker = attakerList.isEmpty();
-        //qDebug() << attakerList.at(0);
-        for (int iter = 0; iter < columnName.size(); ++iter) {
-            QModelIndex index = sourceModel()->index(sourceRow, Ecolumn::EName, sourceParent);
-            QVariant data = sourceModel()->data(index);
-            for (int i = 0; i < attakerList.size(); ++i) {
-                if (data.toString() == attakerList.at(i)) {
-                    resultAttaker = resultAttaker || true;
-                }
-            }
-        }
-        return resultAttaker;
+    if (m_search == "type") {
+        QModelIndex index = sourceModel()->index(sourceRow, Ecolumn::EType, sourceParent);
+        QVariant data = sourceModel()->data(index);
+        if (m_filterType == "All")
+            return true;
+        else
+            return data.toString().contains(m_filterType, Qt::CaseInsensitive);
     }
+
+    //    if (m_search == "attack") {
+    //        //qDebug() << attakerList.at(0);
+    //        QModelIndex index = sourceModel()->index(sourceRow, Ecolumn::EName, sourceParent);
+    //        QVariant data = sourceModel()->data(index);
+
+    //        for (int i = 0; i < attakerList.size(); ++i) {
+    //            if (data.toString() == attakerList.at(i)) {
+    //                return true;
+    //            }
+    //        }
+    //        return false;
+    //    }
 
     //    if(m_search == "filterAllTable"){
-    //        bool res = false;
+    //        bool resultName = false;
     //        //qDebug()<<m_filterName;
     //        int itrator = listModel->Data.at(0).FieldData.size();
     //        for (int i = 0; i < itrator; ++i) {
@@ -217,12 +230,19 @@ bool ListProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePa
     //            QVariant data = sourceModel()->data(index);
     //            //qDebug()<<data;
     //            if(data.toString().contains(m_filterName, Qt::CaseInsensitive))
-    //                res = res || data.toString().contains(m_filterName, Qt::CaseInsensitive);
+    //                resultName = resultName || data.toString().contains(m_filterName, Qt::CaseInsensitive);
     //        }
-    //        return res;
+    //        return resultName;
     //    }
     //qDebug()<<"cx";
     return true;
+}
+
+void ListProxyModel::nodeTypeFilter(QString type)
+{
+    m_filterType = type;
+    m_search = "type";
+    invalidateFilter();
 }
 
 void ListProxyModel::filterString(QString search, QString value)
@@ -230,7 +250,7 @@ void ListProxyModel::filterString(QString search, QString value)
     m_filterName = value;
     //m_search = search;
     m_search = "filter";
-    qDebug() << value;
+    //qDebug() << value;
     invalidateFilter();
 }
 
@@ -240,35 +260,10 @@ void ListProxyModel::filterStringColumn(QString tabName)
     invalidateFilter();
 }
 
-int ListProxyModel::getColumnCount()
-{
-    return dynamic_cast<ListModel *>(sourceModel())->getColumnCount();
-}
-
 QList<QString> ListProxyModel::getDataComboBox()
 {
-    //    for (int i = 0; i < listModel->Data.at(0).FieldData.size(); ++i) {
-    //        //appendItem(sourceModel()->headerData(i, Qt::Horizontal).toString());
-    //        //columnName.append(sourceModel()->headerData(i, Qt::Horizontal).toString());
-    //    }
-
-    //    for (const QString &option : model.stringList()) {
-    //        if (option.contains(searchText, Qt::CaseInsensitive)) {
-    //            filteredOptions.append(option);
-    //        }
-    //    }
 
     return columnName;
-    //    QStringList filteredOptions;
-    //    qDebug() << m_searchTextCombo;
-    //    for (const QString &option : columnName) {
-    //        //qDebug() << option;
-    //        if (option.contains(m_searchTextCombo, Qt::CaseInsensitive) && m_searchTextCombo != "") {
-    //            qDebug() << option;
-    //            filteredOptions.append({option});
-    //        }
-    //    }
-    //    return filteredOptions;
 }
 
 QList<QString> ListProxyModel::getDataComboBoxInt()
@@ -302,8 +297,6 @@ QList<QString> ListProxyModel::getColorFilter()
 
 void ListProxyModel::addTag(QString name, QString value)
 {
-    //qDebug()<<name << value;
-    //Tags.clear();
     Tags.append({name, value});
     m_search = "filter";
     invalidateFilter();
@@ -311,8 +304,6 @@ void ListProxyModel::addTag(QString name, QString value)
 
 void ListProxyModel::addTag1(QString name, QString value)
 {
-    //Tags.clear();
-    //Tags.append({name, value});
     TagFilter1.append({name, value});
     m_search = "filter";
     invalidateFilter();
@@ -320,9 +311,6 @@ void ListProxyModel::addTag1(QString name, QString value)
 
 void ListProxyModel::addTag2(QString name, int value1, int value2)
 {
-    //qDebug()<<search << name << value1 << value2;
-    //Tags.clear();
-    //Tags.append({name,"", value1, value2});
     TagFilter2.append({name, value1, value2});
     m_search = "filter";
     invalidateFilter();
@@ -330,8 +318,6 @@ void ListProxyModel::addTag2(QString name, int value1, int value2)
 
 void ListProxyModel::addTag3(QString name, int value, QString mark)
 {
-    //Tags.clear();
-    //Tags.append({name, "", value ,0 , mark});
     TagFilter3.append({name, value, mark});
     m_search = "filter";
     invalidateFilter();
@@ -387,6 +373,12 @@ QList<QString> ListProxyModel::getTabBarName()
     return tabList;
 }
 
+QList<QString> ListProxyModel::getFilterData()
+{
+    FilterDataList.append({"All", "Aircraft", "System", "Station"});
+    return FilterDataList;
+}
+
 QStringList ListProxyModel::filterCombo(QString text, QString nameFilter)
 {
     QStringList filteredList;
@@ -408,10 +400,14 @@ QStringList ListProxyModel::filterCombo(QString text, QString nameFilter)
 
 void ListProxyModel::attacker(QString name)
 {
-    attakerList.append({name, "mamad", "ahmad", "farhad"});
-    m_search = "attack";
-    invalidateFilter();
+    dynamic_cast<ListModel *>(sourceModel())->attacker(name);
 }
+
+void ListProxyModel::setChangeModel(QString checkModel)
+{
+    dynamic_cast<ListModel *>(sourceModel())->setChangeModel(checkModel);
+}
+
 //-----------------------------------------ListModel------------------------------------
 
 #include <QColor>
@@ -638,49 +634,43 @@ int ListModel::rowCount(const QModelIndex &) const
 {
     //    qDebug() <<Data.at(0).FieldData.size();
     //        qDebug() <<Data.size();
+    if (modelType == "attackerModel")
+        return DataAttacker->size();
     return Data.size();
 }
 
 int ListModel::columnCount(const QModelIndex &) const
 {
     //qDebug()<<Data.at(0).FieldData.size();
+    if (modelType == "attackerModel")
+        return DataAttacker->at(0).FieldData.size();
     return Data.at(0).FieldData.size();
 }
 
 QVariant ListModel::data(const QModelIndex &index, int role) const
 {
+    //qDebug() << "changeModel: " << modelType;
     if (role == Qt::BackgroundRole) {
         // color of first column
         if (index.column() == 0) {
-            //            for (int i = 0; i < Data.size(); i++) {
-            ////                qDebug()<<Data.at(i).FieldData.at(0).value;
-            //                QVariant colorFirsColumn = Data.at(i).FieldData.at(0).value;
-            //                if(index.row() == i){
-            //                    QColor Background(colorFirsColumn.toString());
-            //                    return Background;
-            //                }
-            //            }
+            if (modelType == "attackerModel") {
+                return QColor(
+                    DataAttacker->at(index.row()).FieldData.at(index.column()).value.toString());
+            }
             return QColor(Data.at(index.row()).FieldData.at(index.column()).value.toString());
         }
         //        if (index.row())   //change background only for cell(1,2)
         //        {
-        QColor Background("#DEE3E6"); //#bac4f5
+        QColor Background("#DEE3E6"); //#bac4f5 //#DEE3E6
         return Background;
-        //        }
-        //        else{
-        //            QColor Background("#DEE3E6"); //#e1e5fc
-        //            return Background;
-        //        }
-        //        if(index.row()){
-        //            QColor Background("#bac4f5");
-        //            return Background;
-        //        }
     }
 
     if (role == Qt::DecorationRole && index.column() == 1 || index.column() == 15
         || index.column() == 16 || index.column() == 17) {
+        if (modelType == "attackerModel") {
+            return DataAttacker->at(index.row()).FieldData.at(index.column()).value.toString();
+        }
         return Data.at(index.row()).FieldData.at(index.column()).value.toString();
-        //QPixmap pixmap(Data.at(index.row()).FieldData.at(index.column()).value);
     }
 
     if (role == Qt::DisplayRole) {
@@ -688,6 +678,11 @@ QVariant ListModel::data(const QModelIndex &index, int role) const
         //            if(index.column() == i){
         //                return Data.at(index.row()).FieldData.at(index.column()).value;}
         //        }
+
+        if (modelType == "attackerModel") {
+            //qDebug() << "change Model!!!!!";
+            return DataAttacker->at(index.row()).FieldData.at(index.column()).value;
+        }
         return Data.at(index.row()).FieldData.at(index.column()).value;
     } else {
         return QVariant("defualt");
@@ -704,17 +699,13 @@ QVariant ListModel::headerData(int section, Qt::Orientation orientation, int rol
         return QVariant("defualt");
 }
 
-int ListModel::getColumnCount()
-{
-    return Data.at(0).FieldData.size();
-}
-
 void ListModel::selectionRow(int Row, int Column)
 {
-    //qDebug()<<"Row: "<<Row <<"Column: "<< Column;
+    qDebug() << "Row: " << Row << "Column: " << Column;
     selectionModel->clear();
-    for (int i = 0; i < Row; i++) {
-        selectionModel->select(index(Column, i), QItemSelectionModel::Select);
+    //selectionModel->select(index(0, 2), QItemSelectionModel::Select);
+    for (int i = 0; i < Column; i++) {
+        selectionModel->select(index(1, i), QItemSelectionModel::Select);
     }
 }
 
@@ -728,7 +719,43 @@ QHash<int, QByteArray> ListModel::roleNames() const
     return {
         {Qt::DisplayRole, "display"},
         {Qt::BackgroundRole, "background"},
-        {Qt::DecorationRole, "decorate"}
+        {Qt::DecorationRole, "decorate"},
+        {Qt::EditRole, "editRole"}
         //             {Qt::EditRole, "edit"},
     };
+}
+
+void ListModel::attacker(QString name)
+{
+    //qDebug() << "input" << name;
+    DataAttacker->clear();
+
+    int bound = Data.size();
+    for (int i = 0; i < bound; ++i) {
+        if (Data.at(i).FieldData.at(2).value.toString() == name) {
+            //qDebug() << "what is name: " << Data.at(i).FieldData.at(2).value;
+            DataAttacker->append(Data.at(i));
+            //qDebug() << "Data Attacker: " << DataAttacker->at(0).FieldData.at(2).value.toString();
+        }
+    }
+    int randNum1 = QRandomGenerator::global()->bounded(1, bound);
+    int randNum2 = QRandomGenerator::global()->bounded(1, bound);
+    DataAttacker->append(Data.at(randNum1));
+    DataAttacker->append(Data.at(randNum2));
+    //    int total = QRandomGenerator::global()->bounded(1, bound); //number of random row
+    //    //qDebug() << "totalRand: " << total;
+    //    for (int i = 0; i < total; ++i) {
+    //        int randomValue = QRandomGenerator::global()->bounded(0, bound); //which one row
+    //        //QString value = Data.at(randomValue).FieldData.at(2).value.toString();
+    //        DataAttacker->append(Data.at(randomValue));
+    //        qDebug() << DataAttacker->at(i).FieldData.at(2).value.toString();
+    //    }
+}
+
+void ListModel::setChangeModel(QString checkModel)
+{
+    beginResetModel();
+    modelType = checkModel;
+    qDebug() << "Set Model: " << modelType;
+    endResetModel();
 }

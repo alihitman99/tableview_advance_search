@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
     engine->rootContext()->setContextProperty("managerInstance", manager);
 
     const QUrl url(u"qrc:/tableViewHoosham/Main.qml"_qs);
+
     QObject::connect(
 
         engine,
