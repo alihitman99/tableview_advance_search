@@ -137,11 +137,11 @@ bool ListProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePa
 {
     //search Tag all of them
     bool resultName = m_filterName.isEmpty();
-    bool result1 = Tags.isEmpty();
+    bool result1 = TagColor.isEmpty();
     bool result2 = TagFilter1.isEmpty();
     bool result3 = TagFilter2.isEmpty();
     bool result4 = TagFilter3.isEmpty();
-    //    if(!Tags.isEmpty())
+    //    if(!TagColor.isEmpty())
     //        result1 = false;
     //    if(!TagFilter1.isEmpty())
     //        result2 = false;
@@ -153,10 +153,10 @@ bool ListProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePa
         for (int iter = 0; iter < columnName.size(); ++iter) {
             QModelIndex index = sourceModel()->index(sourceRow, iter, sourceParent);
             QVariant data = sourceModel()->data(index);
-            for (int i = 0; i < Tags.size(); ++i) {
-                if (columnName.at(iter) == Tags.at(i).name) {
+            for (int i = 0; i < TagColor.size(); ++i) {
+                if (columnName.at(iter) == TagColor.at(i).name) {
                     result1 = result1
-                              || data.toString().contains(Tags.at(i).value, Qt::CaseInsensitive);
+                              || data.toString().contains(TagColor.at(i).value, Qt::CaseInsensitive);
                 }
             }
             for (int j = 0; j < TagFilter1.size(); ++j) {
@@ -169,7 +169,7 @@ bool ListProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePa
             }
             for (int i = 0; i < TagFilter2.size(); ++i) {
                 if (columnName.at(iter) == TagFilter2.at(i).name) {
-                    //qDebug()<< Tags.at(i).valueFrom << Tags.at(i).valueTo;
+                    //qDebug()<< TagColor.at(i).valueFrom << TagColor.at(i).valueTo;
                     result3 = result3
                               || (data.toInt() >= TagFilter2.at(i).valueFrom
                                   && data.toInt() <= TagFilter2.at(i).valueTo);
@@ -295,9 +295,9 @@ QList<QString> ListProxyModel::getColorFilter()
     return colorList;
 }
 
-void ListProxyModel::addTag(QString name, QString value)
+void ListProxyModel::addTagColor(QString name, QString value)
 {
-    Tags.append({name, value});
+    TagColor.append({name, value});
     m_search = "filter";
     invalidateFilter();
 }
@@ -328,9 +328,9 @@ void ListProxyModel::removeTag(QString filterSearch, QString name, QString value
     //qDebug()<<filterSearch<<name<<value1;
     if (filterSearch == "colorFilter") {
         //qDebug()<<"ssss";
-        Tags.removeIf(
+        TagColor.removeIf(
             [valueToRemove = value1](const FilterTag &s) { return s.value == valueToRemove; });
-        //        Tags.removeAll([valueToRemove = value1](const FilterTag& s) {
+        //        TagColor.removeAll([valueToRemove = value1](const FilterTag& s) {
         //            return s.name == nameToRemove;
         //        });
     }
@@ -350,9 +350,9 @@ void ListProxyModel::removeTag(QString filterSearch, QString name, QString value
         });
     }
 
-    if (Tags.empty() && TagFilter1.empty() && TagFilter2.empty() && TagFilter3.empty())
+    if (TagColor.empty() && TagFilter1.empty() && TagFilter2.empty() && TagFilter3.empty())
         m_search = "";
-    //    qDebug()<<Tags.empty();
+    //    qDebug()<<TagColor.empty();
     invalidateFilter();
 }
 
@@ -361,21 +361,39 @@ void ListProxyModel::selectionRow(int Row, int Column)
     dynamic_cast<ListModel *>(sourceModel())->selectionRow(Row, Column);
 }
 
-QItemSelectionModel *ListProxyModel::selectRowModel()
+QItemSelectionModel *ListProxyModel::selectModel()
 {
-    return dynamic_cast<ListModel *>(sourceModel())->selectRowModel();
+    return dynamic_cast<ListModel *>(sourceModel())->selectModel();
 }
 
 QList<QString> ListProxyModel::getTabBarName()
 {
-    tabList.append({"Main", "Location", "Assignment", "Detection", "Sends"});
+    int iter = dynamic_cast<ListModel *>(sourceModel())->Data.at(0).FieldData.size();
+    for (int i = 0; i < iter; ++i) {
+        QString tabName = dynamic_cast<ListModel *>(sourceModel())->Data.at(0).FieldData.at(i).category;
+        if(!tabList.contains(tabName)){
+            tabList.append({tabName});
+        }
+    }
+    //qDebug()<<tabList;
+
+    //example:
+    tabList.append({"Assignment", "Detection", "Sends"});
 
     return tabList;
 }
 
 QList<QString> ListProxyModel::getFilterData()
 {
-    FilterDataList.append({"All", "Aircraft", "System", "Station"});
+    FilterDataList.append("All");
+    int iter = dynamic_cast<ListModel *>(sourceModel())->Data.size();
+    for (int i = 0; i < iter; ++i) {
+        QString FilterDataName =
+            dynamic_cast<ListModel *>(sourceModel())->Data.at(i).FieldData.at(Ecolumn::EType).value.toString();
+        if(!FilterDataList.contains(FilterDataName)){
+            FilterDataList.append({FilterDataName});
+        }
+    }
     return FilterDataList;
 }
 
@@ -701,16 +719,22 @@ QVariant ListModel::headerData(int section, Qt::Orientation orientation, int rol
 
 void ListModel::selectionRow(int Row, int Column)
 {
-    qDebug() << "Row: " << Row << "Column: " << Column;
-    selectionModel->clear();
-    //selectionModel->select(index(0, 2), QItemSelectionModel::Select);
-    for (int i = 0; i < Column; i++) {
-        selectionModel->select(index(1, i), QItemSelectionModel::Select);
-    }
+    qDebug() << "Row select: " << Row << "Column select: " << Column;
+    //selectionModel->clear();
+    //QItemSelectionModel selectionModel;
+    //selectionModel->select(index(0,2), QItemSelectionModel::ClearAndSelect);
+    qDebug()<<"wtf:"<<selectionModel;
+    selectionModel->select(index(0, 0), QItemSelectionModel::Clear
+                                            | QItemSelectionModel::SelectCurrent
+                                            | QItemSelectionModel::Rows);
+    // for (int i = 0; i < Column; i++) {
+    //     selectionModel->select(index(1, i), QItemSelectionModel::Select);
+    // }
 }
 
-QItemSelectionModel *ListModel::selectRowModel()
+QItemSelectionModel *ListModel::selectModel()
 {
+    qDebug() << "selectttt " ;
     return selectionModel;
 }
 
@@ -729,27 +753,26 @@ void ListModel::attacker(QString name)
 {
     //qDebug() << "input" << name;
     DataAttacker->clear();
-
     int bound = Data.size();
+    int firstRow = -1;
+    //append first row
     for (int i = 0; i < bound; ++i) {
         if (Data.at(i).FieldData.at(2).value.toString() == name) {
-            //qDebug() << "what is name: " << Data.at(i).FieldData.at(2).value;
+            firstRow = i;
             DataAttacker->append(Data.at(i));
-            //qDebug() << "Data Attacker: " << DataAttacker->at(0).FieldData.at(2).value.toString();
         }
     }
-    int randNum1 = QRandomGenerator::global()->bounded(1, bound);
-    int randNum2 = QRandomGenerator::global()->bounded(1, bound);
-    DataAttacker->append(Data.at(randNum1));
-    DataAttacker->append(Data.at(randNum2));
-    //    int total = QRandomGenerator::global()->bounded(1, bound); //number of random row
-    //    //qDebug() << "totalRand: " << total;
-    //    for (int i = 0; i < total; ++i) {
-    //        int randomValue = QRandomGenerator::global()->bounded(0, bound); //which one row
-    //        //QString value = Data.at(randomValue).FieldData.at(2).value.toString();
-    //        DataAttacker->append(Data.at(randomValue));
-    //        qDebug() << DataAttacker->at(i).FieldData.at(2).value.toString();
-    //    }
+    int numberOfRow = QRandomGenerator::global()->bounded(1, bound);
+    QSet<int> *randRow = new QSet<int>;
+    for (int iter = 0; iter < numberOfRow; ++iter) {
+        int randomRow = QRandomGenerator::global()->bounded(1, bound);
+        if(firstRow != randomRow)
+            randRow->insert(randomRow);
+    }
+    foreach(int data, *randRow) {
+        DataAttacker->append(Data.at(data));
+    }
+    delete randRow;
 }
 
 void ListModel::setChangeModel(QString checkModel)

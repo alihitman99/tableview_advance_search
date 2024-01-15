@@ -82,7 +82,7 @@ public:
     Q_INVOKABLE QList<QString> getDataComboBox();
     Q_INVOKABLE QList<QString> getDataComboBoxInt();
     Q_INVOKABLE QList<QString> getColorFilter();
-    Q_INVOKABLE void addTag(QString name, QString value);
+    Q_INVOKABLE void addTagColor(QString name, QString value);
     Q_INVOKABLE void addTag1(QString name, QString value);
     Q_INVOKABLE void addTag2(QString name, int value1, int value2);
     Q_INVOKABLE void addTag3(QString name, int value, QString mark);
@@ -99,7 +99,7 @@ public:
 
     // dynamic_cast to ListModel
     Q_INVOKABLE void selectionRow(int Row, int Column);
-    Q_INVOKABLE QItemSelectionModel *selectRowModel();
+    Q_INVOKABLE QItemSelectionModel *selectModel();
     Q_INVOKABLE void attacker(QString name);
     Q_INVOKABLE void setChangeModel(QString checkModel);
     Q_INVOKABLE QList<QString> getFilterData();
@@ -137,7 +137,7 @@ private:
     //QStringList m_comboItem;
     //QStringList m_comboItemList;
 
-    QList<FilterTag> Tags;
+    QList<FilterTag> TagColor;
     QList<FilterTag1> TagFilter1;
     QList<FilterTag2> TagFilter2;
     QList<FilterTag3> TagFilter3;
@@ -178,8 +178,8 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    void selectionRow(int rowCount, int idxRow);
-    QItemSelectionModel *selectRowModel();
+    Q_INVOKABLE void selectionRow(int rowCount, int idxRow);
+    Q_INVOKABLE QItemSelectionModel *selectModel();
 
     struct NodeFieldData
     {

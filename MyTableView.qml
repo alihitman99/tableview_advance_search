@@ -46,17 +46,31 @@ Rectangle {
     color: rootItem.backgroundColor
 
 
-    property var tableModel: undefined
+    property var tableModel
     //property var attackModel: undefined
 
     Component.onCompleted: {
-
         //tableModel.filterStringColumn("")
     }
+
+    Text{
+        id: txtObjectList
+        text: "Object list"
+        anchors.top: parent.top
+        anchors.topMargin: 20
+        anchors.left: parent.left
+        anchors.leftMargin: 20
+        color: rootItem.foregroundColor
+        font.family: rootItem.fontFamily
+        font.pointSize: 20 / rootItem.monitorRatio
+        font.bold: true
+    }
+
+
     Rectangle{
         id: rectNodeTypeFilter
         color: rootItem.backgroundColor
-        anchors.top: parent.top
+        anchors.top: txtObjectList.bottom
         anchors.topMargin: 20
         //width: parent.width
         height: 26
@@ -88,7 +102,7 @@ Rectangle {
                         text: modelData
                         color: index === repeaterNodeTypeFilter.currentIndex? rootItem.hoverColor: rootItem.foregroundColor
                         font.family: rootItem.fontFamily
-                        font.pixelSize: rootItem.fontPointSize
+                        font.pointSize: rootItem.fontPointSize
                     }
                     MouseArea{
                         anchors.fill: parent
@@ -316,7 +330,7 @@ Rectangle {
                                         anchors.fill: parent
                                         cursorShape: Qt.PointingHandCursor
                                         onClicked: {
-                                            tableModel.addTag("color",
+                                            tableModel.addTagColor("color",
                                                               modelData)
                                             //tagModel.append({ name: "color", signLogical: " : " , value1: modelData, isTo:'', value2:'', filter:"colorFilter" })
                                             tagModel.append({
@@ -1199,7 +1213,7 @@ Rectangle {
                                         shortCut.colorHandler = rootItem.fg30
                                         console.log("enable Tag:", filter)
                                         if (filter === "colorFilter")
-                                            tableModel.addTag(name, model.color)
+                                            tableModel.addTagColor(name, model.color)
                                         else if (filter === "filter1")
                                             tableModel.addTag1(name, value1)
                                         else if (filter === "filter2")
@@ -1392,11 +1406,11 @@ Rectangle {
     //        }}
     Rectangle {
         id: categoryRect
-        color: "#DEE3E6"
+        color: rootItem.backgroundColor
         width: rootItem.width
         height: 50
         anchors.top: rectMainSearch.bottom
-        anchors.topMargin: 20
+        anchors.topMargin: 30
         anchors.left: rectMainSearch.left
         //anchors.leftMargin: 20
         anchors.right: rectMainSearch.right
@@ -1479,68 +1493,70 @@ Rectangle {
         }
     }
 
-    Rectangle {
-        id: tableviewRect
-        color: rootItem.backgroundColor
-        width: rootItem.width
-        height: rootItem.height
-        anchors.top: categoryRect.bottom
-        anchors.topMargin: 10
+    HorizontalHeaderView {
+        anchors.left: scrollViewTable.left
+        anchors.leftMargin: 20
+        anchors.bottom: scrollViewTable.top
+        syncView: tableview
+        clip: true
+        delegate: Rectangle {
+            id: rectHorizontalHeaderView
+            implicitHeight: 30
+            implicitWidth: 50 //parent.width
+            color: "transparent" //"#DEE3E6"
+            Rectangle {
+                width: parent.width
+                height: 2
+                color: rootItem.foregroundColor
+                anchors.bottom: parent.bottom
+            }
+            Text {
+                text: display
+                color: rootItem.foregroundColor
+                font.family: rootItem.fontFamily
+                font.pointSize: 17 / rootItem.monitorRatio
+                //anchors.centerIn: parent
+                anchors.left: model.column === 2 ? parent.left : undefined
+                anchors.centerIn: model.column === 2 ? undefined : parent
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.leftMargin: model.column === 2 ? -tableview.columnZero
+                                                         - tableview.columnIcons : 0
 
-        //anchors.bottom: rootItem.bottom
-        HorizontalHeaderView {
-            anchors.left: tableview.left
-            anchors.bottom: tableview.top
-            syncView: tableview
-            clip: true
-            delegate: Rectangle {
-                id: rectHorizontalHeaderView
-                implicitHeight: 30
-                implicitWidth: 50 //parent.width
-                color: "transparent" //"#DEE3E6"
-                Rectangle {
-                    width: parent.width
-                    height: 2
-                    color: rootItem.foregroundColor
-                    anchors.bottom: parent.bottom
-                }
-                Text {
-                    text: display
-                    color: rootItem.foregroundColor
-                    font.family: rootItem.fontFamily
-                    font.pointSize: 17 / rootItem.monitorRatio
-                    //anchors.centerIn: parent
-                    anchors.left: model.column === 2 ? parent.left : undefined
-                    anchors.centerIn: model.column === 2 ? undefined : parent
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.leftMargin: model.column === 2 ? -tableview.columnZero
-                                                             - tableview.columnIcons : 0
-
-                    visible: model.column !== 0 && model.column
-                             !== 1 && model.column !== tableModel.columnCount()
-                             - 1 && model.column !== tableModel.columnCount()
-                             - 2 && model.column !== tableModel.columnCount() - 3
-                }
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        //                            console.log(model.index)
-                        console.log(model.index) //model : data displayRole in c++
-                        tableModel.sortTable(
-                                    model.index) // model : data index in c++
-                    }
+                visible: model.column !== 0 && model.column
+                         !== 1 && model.column !== tableModel.columnCount()
+                         - 1 && model.column !== tableModel.columnCount()
+                         - 2 && model.column !== tableModel.columnCount() - 3
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    //                            console.log(model.index)
+                    console.log(model.index) //model : data displayRole in c++
+                    tableModel.sortTable(
+                                model.index) // model : data index in c++
                 }
             }
         }
+    }
+
+    ScrollView{
+        id: scrollViewTable
+        anchors.left: rootItem.left
+        anchors.right: rootItem.right
+        // width: rootItem.width
+        // height: rootItem.height
+        anchors.top: categoryRect.bottom
+        anchors.topMargin: 20
+        anchors.bottom: rootItem.bottom
+        //anchors.topMargin: 5
+        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
         TableView {
             id: tableview
-            //width: rootItem.width
-            //Layout.fillHeight: true
-            anchors.fill: parent
+            anchors.fill: parent//tableviewRect
             //Layout.alignment: Qt.AlignLeft
             anchors.leftMargin: 20
-            anchors.topMargin: 20
+            //anchors.topMargin: 20
             selectionBehavior: TableView.SelectRows //tableview.SelectRows
             property int selectedRow: -1
             property int columnZero: 5 //tableview.width / tableModel.columnCount() / 7
@@ -1558,9 +1574,14 @@ Rectangle {
                 //                return tableview.rows % IndexRow
             }
 
-            model: tableModel //tableModel //tableModel
+            model: tableModel //tableModel
 
-            //selectionModel: tableModel ? tableModel.selectRowModel() : undefined
+            //selectionModel: tableModel.selectModel()
+            selectionModel: ItemSelectionModel {
+                id: selectionID
+                model: tableview.selectionModel
+                //model: tableModel
+            }
 
             delegate: Rectangle {
                 id: rectDelegate
@@ -1618,9 +1639,11 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
+                        //selectionID.select(tableview.selectionModel.model.index(row,0), ItemSelectionModel.ClearAndSelect | ItemSelectionModel.Rows)
+                        //tableview.selectionModel.select(tableview.selectionModel.index(0,2), ItemSelectionModel.Toggle | ItemSelectionModel.Rows)
                         //tableview.selectedRow = model.row
-                        //tableModel.selectionRow(tableview.selectedRow, columnCnt);
-                        console.log("Row index: ", model.row, "column", columnCnt)
+                        //tableModel.selectionRow(row, 18)
+                        // console.log("Row index: ", model.row, "column", columnCnt)
                         //console.log("column count : ", rowCount)
                         //console.log("column filter count: ", tableModel.columnCount())
                         //model.column === 11
@@ -1628,7 +1651,16 @@ Rectangle {
                         if (display === "qrc:/icons/more-icon.jpg") {
                             menuTable.popup()
                         }
-                        if (display === "qrc:/icons/battle-icon.jpg") {
+                        else if(display === "qrc:/icons/battle-icon.jpg" && model.row === 0 && tableview.checkAttackIconRow !== -1){
+                            console.log("chnage model")
+                            tableModel.setChangeModel("")
+                            tableview.checkAttackIconRow = -1
+                            tableview.checkAttackIconColumn = -1
+                            //tableview.selectedRow = model.row
+                            //tableModel.selectionRow(tableview.selectedRow, 18)
+
+                        }
+                        else if (display === "qrc:/icons/battle-icon.jpg") {
                             //console.log(tableview.itemAtIndex(0,2))
                             tableModel.attacker(tableModel.data(tableview.index(model.row, 2)))
                             tableModel.setChangeModel("attackerModel")
@@ -1636,17 +1668,13 @@ Rectangle {
                             //change color attackIcon
                             tableview.checkAttackIconRow = 0
                             tableview.checkAttackIconColumn = column
+                            selectionID.select(tableview.selectionModel.model.index(0,0), ItemSelectionModel.ClearAndSelect | ItemSelectionModel.Rows)
 
+                            //tableModel.selectionRow(row, 0)
 
 
                         }
-                        if(display === "qrc:/icons/battle-icon.jpg" && model.row === 0 && tableview.checkAttackIconRow !== -1){
-                            console.log("chnage model")
-                            tableModel.setChangeModel("")
-                            tableview.checkAttackIconRow = -1
-                            tableview.checkAttackIconColumn = -1
 
-                        }
 
                         if (display === "qrc:/icons/target-icon.jpg") {
                             console.log(tableModel.data(tableview.index(model.row, 2)))
@@ -1742,5 +1770,7 @@ Rectangle {
                 }
             }
         }
+        // }
+
     }
 }
